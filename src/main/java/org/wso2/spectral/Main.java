@@ -14,6 +14,8 @@ public class Main {
             System.out.println(ruleset.rules);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
+        } catch (SpectralException e) {
+            throw new RuntimeException(e);
         }
     }
 }
