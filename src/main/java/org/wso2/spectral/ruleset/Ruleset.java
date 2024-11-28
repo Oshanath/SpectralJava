@@ -49,6 +49,12 @@ public class Ruleset {
             }
         }
 
+        // TODO: Read extends
+
+        // TODO: Read overrides
+
+        // TODO: Merge Rules
+
     }
 
     private void assertValidRuleset(Object yamlData) throws SpectralException{

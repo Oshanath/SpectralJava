@@ -14,6 +14,7 @@ public class Rule {
     private List<RuleThen> then;
     private List<String> given;
     private List<String> formats;
+    private boolean enabled;
 
     public Rule(Map<String, Object> ruleData) {
         Object descriptionObject = ruleData.get("description");
@@ -23,6 +24,9 @@ public class Rule {
         Object thenObject = ruleData.get("then");
         Object givenObject = ruleData.get("given");
         Object formatsObject = ruleData.get("formats");
+
+        // TODO: Read enabled
+        this.enabled = true;
 
         if (descriptionObject instanceof String) {
             this.description = (String) descriptionObject;
