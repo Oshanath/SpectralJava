@@ -3,7 +3,7 @@ package org.wso2.spectral.ruleset;
 import java.util.Map;
 
 public class RuleThen {
-    private String field;
+    public String field;
     private String function;
     private Map<String, Object> functionOptions;
 

@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Map;
 
 public class Rule {
-    private String description;
+    public String description;
     private String message;
     private DiagnosticSeverity severity;
     private boolean resolved;
-    private List<RuleThen> then;
-    private List<String> given;
+    public List<RuleThen> then;
+    public List<String> given;
     private List<String> formats;
     private boolean enabled;
 
@@ -84,6 +84,10 @@ public class Rule {
 
         if (givenObject instanceof List) {
             this.given = (List<String>) givenObject;
+        }
+        else if (givenObject instanceof String) {
+            this.given = new ArrayList<>();
+            this.given.add((String) givenObject);
         }
         else {
             throw new RuntimeException("Invalid rule given or missing");
