@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class Rule {
     public String description;
-    private String message;
+    public String message;
     private DiagnosticSeverity severity;
     private boolean resolved;
     public List<RuleThen> then;

@@ -1,4 +1,4 @@
-package org.wso2.spectral;
+package org.wso2.spectral.document;
 
 import java.util.ArrayList;
 

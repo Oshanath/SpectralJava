@@ -1,8 +1,7 @@
-package org.wso2.spectral;
+package org.wso2.spectral.document;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.InvalidPathException;
 import com.jayway.jsonpath.JsonPath;
@@ -10,6 +9,7 @@ import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.PathNotFoundException;
 import org.snakeyaml.engine.v2.api.Load;
 import org.snakeyaml.engine.v2.api.LoadSettings;
+import org.wso2.spectral.functions.FunctionResult;
 import org.wso2.spectral.ruleset.Rule;
 import org.wso2.spectral.ruleset.RuleThen;
 import org.wso2.spectral.ruleset.Ruleset;
@@ -31,7 +31,7 @@ public class Document {
         LoadSettings settings = LoadSettings.builder().build();
         Load yamlLoader = new Load(settings);
         Object yamlData = yamlLoader.loadFromInputStream(inputStream);
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
         this.documentString = gson.toJson(yamlData);
 
         this.document = JsonPath.parse(this.documentString).json();
@@ -48,13 +48,12 @@ public class Document {
                 try {
                     List<Object> results = JsonPath.read(this.document, given);
                     for (Object result : results) {
-                        System.out.println("Path found: " + given);
                         lintNode(result, rule);
                     }
                 } catch(PathNotFoundException e) {
-                    System.out.println("Json Path not found: " + given);
+//                    System.out.println("Json Path not found: " + given);
                 } catch (InvalidPathException e) {
-                    System.out.println("Unsupported Json Path: " + given);
+//                    System.out.println("Unsupported Json Path: " + given);
                     // TODO: Implement json path plus features
 //                    e.printStackTrace();
                 }
@@ -79,7 +78,10 @@ public class Document {
             ArrayList<LintTarget> lintTargets = getLintTargets(node, then);
 
             for (LintTarget target : lintTargets) {
-
+                FunctionResult result = then.lintFunction.execute(target);
+                if (result.isFailure) {
+                    System.out.println("Failed: " + rule.message);
+                }
             }
         }
     }
