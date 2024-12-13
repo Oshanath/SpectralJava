@@ -8,7 +8,7 @@ public class DoNothing extends LintFunction{
             super(null);
         }
 
-        public FunctionResult execute(LintTarget target) {
-            return new FunctionResult();
+        public boolean execute(LintTarget target) {
+            return true;
         }
 }

@@ -11,26 +11,18 @@ public class Truthy extends LintFunction {
         super(options);
     }
 
-    public FunctionResult execute(LintTarget target) {
-
-        boolean result;
-
+    public boolean execute(LintTarget target) {
         if (target.value instanceof String) {
-            result = !((String) target.value).isEmpty();
+            return !((String) target.value).isEmpty();
         }
         else if (target.value instanceof List) {
-            result = !((List) target.value).isEmpty();
+            return !((List) target.value).isEmpty();
         }
         else if (target.value instanceof Map) {
-            result = !((Map) target.value).isEmpty();
+            return !((Map) target.value).isEmpty();
         }
         else {
-            result = target.value != null;
+            return target.value != null;
         }
-
-        FunctionResult functionResult = new FunctionResult();
-        functionResult.result = result;
-        functionResult.isFailure = !result;
-        return functionResult;
     }
 }

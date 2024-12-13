@@ -1,6 +1,7 @@
 package org.wso2.spectral.ruleset;
 
 import org.wso2.spectral.DiagnosticSeverity;
+import org.wso2.spectral.functions.FunctionResult;
 
 import java.util.ArrayList;
 import java.util.List;

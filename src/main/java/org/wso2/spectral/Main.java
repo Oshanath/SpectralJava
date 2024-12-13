@@ -1,11 +1,13 @@
 package org.wso2.spectral;
 
 import org.wso2.spectral.document.Document;
+import org.wso2.spectral.functions.FunctionResult;
 import org.wso2.spectral.ruleset.Ruleset;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class Main {
 
@@ -16,7 +18,10 @@ public class Main {
 
             InputStream documentStream = new FileInputStream("/Users/oshanath/spectral/opeapitest.yaml");
             Document document = new Document(documentStream);
-            document.lint(ruleset);
+            ArrayList<FunctionResult> results = document.lint(ruleset);
+            for (FunctionResult result : results) {
+                System.out.println(result);
+            }
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (SpectralException e) {

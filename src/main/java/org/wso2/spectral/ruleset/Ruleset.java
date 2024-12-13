@@ -69,5 +69,7 @@ public class Ruleset {
         // TODO: Validate aliases
 
         // TODO: Validate by format
+
+        // TODO: Validate function options
     }
 }

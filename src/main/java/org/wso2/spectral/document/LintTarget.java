@@ -10,4 +10,12 @@ public class LintTarget {
         this.jsonPath = jsonPath;
         this.value = value;
     }
+
+    public String getPathString() {
+        StringBuilder resultPath = new StringBuilder();
+        for (String path : jsonPath) {
+            resultPath.append("[").append(path).append("]");
+        }
+        return resultPath.toString();
+    }
 }

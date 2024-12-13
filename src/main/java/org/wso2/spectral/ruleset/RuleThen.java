@@ -2,6 +2,7 @@ package org.wso2.spectral.ruleset;
 
 import org.wso2.spectral.functions.DoNothing;
 import org.wso2.spectral.functions.LintFunction;
+import org.wso2.spectral.functions.Pattern;
 import org.wso2.spectral.functions.Truthy;
 
 import java.util.Map;
@@ -19,6 +20,9 @@ public class RuleThen {
 
         if (this.function.equals("truthy")) {
             this.lintFunction = new Truthy(functionOptions);
+        }
+        else if (this.function.equals("pattern")) {
+            this.lintFunction = new Pattern(functionOptions);
         }
         else {
             this.lintFunction = new DoNothing();

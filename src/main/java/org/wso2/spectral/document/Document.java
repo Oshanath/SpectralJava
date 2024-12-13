@@ -26,8 +26,10 @@ public class Document {
 
     private String documentString;
     private Object document;
+    private ArrayList<FunctionResult> results;
 
     public Document(InputStream inputStream) {
+        results = new ArrayList<>();
         LoadSettings settings = LoadSettings.builder().build();
         Load yamlLoader = new Load(settings);
         Object yamlData = yamlLoader.loadFromInputStream(inputStream);
@@ -38,7 +40,7 @@ public class Document {
         resolveReferences();
     }
 
-    public void lint(Ruleset ruleset) {
+    public ArrayList<FunctionResult> lint(Ruleset ruleset) {
         // TODO: Add parsing errors to the result set
 
         // TODO: Filter enabled and relevant rules
@@ -46,9 +48,10 @@ public class Document {
         for(Rule rule : ruleset.rules.values()) {
             for(String given : rule.given) {
                 try {
-                    List<Object> results = JsonPath.read(this.document, given);
-                    for (Object result : results) {
-                        lintNode(result, rule);
+                    Configuration config = Configuration.builder().options(Option.AS_PATH_LIST).build();
+                    List<String> paths = JsonPath.using(config).parse(this.document).read(given);
+                    for (String path : paths) {
+                        lintNode(path, rule);
                     }
                 } catch(PathNotFoundException e) {
 //                    System.out.println("Json Path not found: " + given);
@@ -59,6 +62,8 @@ public class Document {
                 }
             }
         }
+
+        return results;
     }
 
     private void resolveReferences() {
@@ -73,15 +78,20 @@ public class Document {
          */
     }
 
-    private void lintNode(Object node, Rule rule) {
+    private void lintNode(String path, Rule rule) {
+        Object node;
+        try {
+            node = JsonPath.read(this.document, path);
+        } catch (PathNotFoundException e) {
+            return;
+        }
         for (RuleThen then : rule.then) {
             ArrayList<LintTarget> lintTargets = getLintTargets(node, then);
 
             for (LintTarget target : lintTargets) {
-                FunctionResult result = then.lintFunction.execute(target);
-                if (result.isFailure) {
-                    System.out.println("Failed: " + rule.message);
-                }
+                boolean result = then.lintFunction.execute(target);
+                String targetPath = target.getPathString();
+                results.add(new FunctionResult(result, path + targetPath, rule.message));
             }
         }
     }
@@ -111,17 +121,30 @@ public class Document {
             }
             else if (then.field.startsWith("$")) {
                 Configuration config = Configuration.builder().options(Option.AS_PATH_LIST).build();
-                List<String> paths = JsonPath.using(config).parse(node).read(then.field);
+                List<String> paths;
+                try {
+                    paths = JsonPath.using(config).parse(node).read(then.field);
+                } catch (PathNotFoundException e) {
+                    return lintTargets;
+                }
 
                 for (String path : paths) {
                     ArrayList<String> splitPath = splitJsonPath(path);
-                    Object value = JsonPath.read(node, path);
-                    lintTargets.add(new LintTarget(splitPath, value));
+                    Object value;
+                    try {
+                        value = JsonPath.read(node, path);
+                        lintTargets.add(new LintTarget(splitPath, value));
+                    } catch (PathNotFoundException ignored) {}
                 }
             }
             else {
                 ArrayList<String> path = toPath(then.field);
-                Object value = JsonPath.read(node, then.field);
+                Object value;
+                try {
+                    value = JsonPath.read(node, then.field);
+                } catch (PathNotFoundException e) {
+                    return lintTargets;
+                }
                 lintTargets.add(new LintTarget(path, value));
             }
         }
