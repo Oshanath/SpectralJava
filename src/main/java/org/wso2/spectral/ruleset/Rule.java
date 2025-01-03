@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Rule {
+    public String name;
     public String description;
     public String message;
     private DiagnosticSeverity severity;
@@ -17,7 +18,8 @@ public class Rule {
     private List<String> formats;
     private boolean enabled;
 
-    public Rule(Map<String, Object> ruleData) {
+    public Rule(String name, Map<String, Object> ruleData) {
+        this.name = name;
         Object descriptionObject = ruleData.get("description");
         Object messageObject = ruleData.get("message");
         Object severityObject = ruleData.get("severity");

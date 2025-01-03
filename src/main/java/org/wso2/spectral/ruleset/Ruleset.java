@@ -33,7 +33,7 @@ public class Ruleset {
         // Read rules
         for (Map.Entry<String, Object> entry : rules.entrySet()) {
             String ruleName = entry.getKey();
-            Rule rule = new Rule((Map<String, Object>) entry.getValue());
+            Rule rule = new Rule(ruleName, (Map<String, Object>) entry.getValue());
             this.rules.put(ruleName, rule);
         }
 

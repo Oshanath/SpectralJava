@@ -91,7 +91,7 @@ public class Document {
             for (LintTarget target : lintTargets) {
                 boolean result = then.lintFunction.execute(target);
                 String targetPath = target.getPathString();
-                results.add(new FunctionResult(result, path + targetPath, rule.message));
+                results.add(new FunctionResult(result, path + targetPath, rule.message, rule));
             }
         }
     }
@@ -142,10 +142,10 @@ public class Document {
                 Object value;
                 try {
                     value = JsonPath.read(node, then.field);
+                    lintTargets.add(new LintTarget(path, value));
                 } catch (PathNotFoundException e) {
-                    return lintTargets;
+                    lintTargets.add(new LintTarget(path, null));
                 }
-                lintTargets.add(new LintTarget(path, value));
             }
         }
         else {
