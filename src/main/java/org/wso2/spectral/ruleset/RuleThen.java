@@ -1,9 +1,13 @@
 package org.wso2.spectral.ruleset;
 
-import org.wso2.spectral.functions.DoNothing;
+import org.wso2.spectral.functions.core.Alphabetical;
+import org.wso2.spectral.functions.core.Casing;
+import org.wso2.spectral.functions.core.ContainsKey;
+import org.wso2.spectral.functions.core.DoNothing;
 import org.wso2.spectral.functions.LintFunction;
-import org.wso2.spectral.functions.Pattern;
-import org.wso2.spectral.functions.Truthy;
+import org.wso2.spectral.functions.core.Length;
+import org.wso2.spectral.functions.core.Pattern;
+import org.wso2.spectral.functions.core.Truthy;
 
 import java.util.Map;
 
@@ -23,6 +27,22 @@ public class RuleThen {
         }
         else if (this.function.equals("pattern")) {
             this.lintFunction = new Pattern(functionOptions);
+        }
+        else if (this.function.equals("alphabetical")) {
+            this.lintFunction = new Alphabetical(functionOptions);
+        }
+        else if (this.function.equals("containsKey")) {
+            this.lintFunction = new ContainsKey(functionOptions);
+        }
+        else if (this.function.equals("length")) {
+            this.lintFunction = new Length(functionOptions);
+        }
+        else if (this.function.equals("casing")) {
+            this.lintFunction = new Casing(functionOptions);
+        }
+        else if (this.function.equals("schema")) {
+            // TODO: Implement Schema
+            this.lintFunction = new DoNothing();
         }
         else {
             this.lintFunction = new DoNothing();
