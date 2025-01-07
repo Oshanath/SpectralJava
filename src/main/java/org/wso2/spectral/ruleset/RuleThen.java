@@ -7,6 +7,7 @@ import org.wso2.spectral.functions.core.DoNothing;
 import org.wso2.spectral.functions.LintFunction;
 import org.wso2.spectral.functions.core.Length;
 import org.wso2.spectral.functions.core.Pattern;
+import org.wso2.spectral.functions.core.Schema;
 import org.wso2.spectral.functions.core.Truthy;
 
 import java.util.Map;
@@ -41,8 +42,7 @@ public class RuleThen {
             this.lintFunction = new Casing(functionOptions);
         }
         else if (this.function.equals("schema")) {
-            // TODO: Implement Schema
-            this.lintFunction = new DoNothing();
+            this.lintFunction = new Schema(functionOptions);
         }
         else {
             this.lintFunction = new DoNothing();
