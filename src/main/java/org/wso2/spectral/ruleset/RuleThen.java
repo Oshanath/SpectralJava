@@ -3,12 +3,15 @@ package org.wso2.spectral.ruleset;
 import org.wso2.spectral.functions.core.Alphabetical;
 import org.wso2.spectral.functions.core.Casing;
 import org.wso2.spectral.functions.core.ContainsKey;
+import org.wso2.spectral.functions.core.Defined;
 import org.wso2.spectral.functions.core.DoNothing;
 import org.wso2.spectral.functions.LintFunction;
 import org.wso2.spectral.functions.core.Length;
 import org.wso2.spectral.functions.core.Pattern;
 import org.wso2.spectral.functions.core.Schema;
 import org.wso2.spectral.functions.core.Truthy;
+import org.wso2.spectral.functions.core.Undefined;
+import org.wso2.spectral.functions.core.Xor;
 
 import java.util.Map;
 
@@ -44,8 +47,17 @@ public class RuleThen {
         else if (this.function.equals("schema")) {
             this.lintFunction = new Schema(functionOptions);
         }
+        else if (this.function.equals("defined")) {
+            this.lintFunction = new Defined();
+        }
+        else if (this.function.equals("undefined")) {
+            this.lintFunction = new Undefined();
+        }
+        else if (this.function.equals("xor")) {
+            this.lintFunction = new Xor(functionOptions);
+        }
         else {
-            this.lintFunction = new DoNothing();
+            throw new RuntimeException("Unknown function: " + this.function);
         }
     }
 }

@@ -3,6 +3,8 @@ package org.wso2.spectral;
 import org.wso2.spectral.document.Document;
 import org.wso2.spectral.functions.FunctionResult;
 import org.wso2.spectral.ruleset.Ruleset;
+import org.wso2.spectral.ruleset.fileType.JsonRuleset;
+import org.wso2.spectral.ruleset.fileType.YamlRuleset;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -14,7 +16,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             InputStream rulesetStream = new FileInputStream("/Users/oshanath/spectral/ruleset.yaml");
-            Ruleset ruleset = new Ruleset(rulesetStream);
+            YamlRuleset ruleset = new YamlRuleset(rulesetStream);
 
             InputStream documentStream = new FileInputStream("/Users/oshanath/spectral/opeapitest.yaml");
             Document document = new Document(documentStream);

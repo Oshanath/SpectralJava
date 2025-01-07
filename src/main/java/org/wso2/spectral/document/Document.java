@@ -9,6 +9,8 @@ import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.PathNotFoundException;
 import org.snakeyaml.engine.v2.api.Load;
 import org.snakeyaml.engine.v2.api.LoadSettings;
+import org.snakeyaml.engine.v2.api.lowlevel.Compose;
+import org.snakeyaml.engine.v2.nodes.Node;
 import org.wso2.spectral.functions.FunctionResult;
 import org.wso2.spectral.ruleset.Rule;
 import org.wso2.spectral.ruleset.RuleThen;
@@ -33,6 +35,7 @@ public class Document {
         LoadSettings settings = LoadSettings.builder().build();
         Load yamlLoader = new Load(settings);
         Object yamlData = yamlLoader.loadFromInputStream(inputStream);
+
         Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
         this.documentString = gson.toJson(yamlData);
 
@@ -53,10 +56,11 @@ public class Document {
                     for (String path : paths) {
                         lintNode(path, rule);
                     }
+                    System.out.println("Json Path resolved: " + given);
                 } catch(PathNotFoundException e) {
-//                    System.out.println("Json Path not found: " + given);
+                    System.out.println("Json Path not found: " + given);
                 } catch (InvalidPathException e) {
-//                    System.out.println("Unsupported Json Path: " + given);
+                    System.out.println("Unsupported Json Path: " + given);
                     // TODO: Implement json path plus features
 //                    e.printStackTrace();
                 }

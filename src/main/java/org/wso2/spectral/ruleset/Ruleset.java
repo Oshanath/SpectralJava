@@ -16,19 +16,13 @@ public class Ruleset {
     public ArrayList<String> formats;
     public ArrayList<Ruleset> extendsRulesets;
 
-    public Ruleset(InputStream inputStream) throws SpectralException{
+    public Ruleset(Map<String, Object> datamap) throws SpectralException{
         this.rules = new HashMap<>();
         this.aliases = new ArrayList<>();
         this.hasComplexAliases = false;
 
-        LoadSettings settings = LoadSettings.builder().build();
-        Load yamlLoader = new Load(settings);
-
-        Object yamlData = yamlLoader.loadFromInputStream(inputStream);
-        assertValidRuleset(yamlData);
-
-        Map<String, Object> yamlMap = (Map<String, Object>) yamlData;
-        Map<String, Object> rules = (Map<String, Object>) yamlMap.get("rules");
+        assertValidRuleset(datamap);
+        Map<String, Object> rules = (Map<String, Object>) datamap.get("rules");
 
         // Read rules
         for (Map.Entry<String, Object> entry : rules.entrySet()) {
@@ -38,8 +32,8 @@ public class Ruleset {
         }
 
         // Read aliases
-        if(yamlMap.containsKey("aliases")) {
-            Map<String, Object> aliases = (Map<String, Object>) yamlMap.get("aliases");
+        if(datamap.containsKey("aliases")) {
+            Map<String, Object> aliases = (Map<String, Object>) datamap.get("aliases");
             for (Map.Entry<String, Object> entry : aliases.entrySet()) {
                 RulesetAliasDefinition alias = new RulesetAliasDefinition(entry.getKey(), entry.getValue());
                 this.aliases.add(alias);
