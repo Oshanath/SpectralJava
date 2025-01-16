@@ -18,13 +18,15 @@
 package org.wso2.spectral.functions.core;
 
 import org.wso2.spectral.document.LintTarget;
+import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
 import java.util.Map;
 
+@FunctionName("defined")
 public class Defined extends LintFunction {
 
-    public Defined() {
+    public Defined(Map<String, Object> options) {
         super(null);
     }
 

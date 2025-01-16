@@ -17,12 +17,15 @@
  */
 package org.wso2.spectral.functions.core;
 
+import java.util.Map;
 import org.wso2.spectral.document.LintTarget;
+import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
+@FunctionName("undefined")
 public class Undefined extends LintFunction {
 
-    public Undefined() {
+    public Undefined(Map<String, Object> options) {
         super(null);
     }
 

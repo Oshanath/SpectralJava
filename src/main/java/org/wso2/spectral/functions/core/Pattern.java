@@ -18,11 +18,13 @@
 package org.wso2.spectral.functions.core;
 
 import org.wso2.spectral.document.LintTarget;
+import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
 import java.util.Map;
 import java.util.regex.PatternSyntaxException;
 
+@FunctionName("pattern")
 public class Pattern extends LintFunction {
 
     public Pattern(Map<String, Object> options) {

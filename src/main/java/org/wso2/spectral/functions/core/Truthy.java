@@ -18,14 +18,16 @@
 package org.wso2.spectral.functions.core;
 
 import org.wso2.spectral.document.LintTarget;
+import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
 import java.util.List;
 import java.util.Map;
 
+@FunctionName("truthy")
 public class Truthy extends LintFunction {
 
-    public Truthy() {
+    public Truthy(Map<String, Object> options) {
         super(null);
     }
 

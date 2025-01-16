@@ -18,11 +18,13 @@
 package org.wso2.spectral.functions.core;
 
 import org.wso2.spectral.document.LintTarget;
+import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
 import java.util.Map;
 import java.util.regex.Pattern;
 
+@FunctionName("casing")
 public class Casing extends LintFunction {
 
     private final String flat = "[a-z][a-z{__DIGITS__}]*";

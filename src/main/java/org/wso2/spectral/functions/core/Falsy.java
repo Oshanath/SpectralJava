@@ -18,14 +18,16 @@
 package org.wso2.spectral.functions.core;
 
 import org.wso2.spectral.document.LintTarget;
+import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
 import java.util.List;
 import java.util.Map;
 
+@FunctionName("falsy")
 public class Falsy extends LintFunction {
 
-    public Falsy() {
+    public Falsy(Map<String, Object> options) {
         super(null);
     }
 

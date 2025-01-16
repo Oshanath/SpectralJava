@@ -18,11 +18,13 @@
 package org.wso2.spectral.functions.core;
 
 import org.wso2.spectral.document.LintTarget;
+import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
 import java.util.ArrayList;
 import java.util.Map;
 
+@FunctionName("xor")
 public class Xor extends LintFunction {
 
     public Xor(Map<String, Object> options) {

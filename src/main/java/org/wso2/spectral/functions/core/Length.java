@@ -19,11 +19,13 @@ package org.wso2.spectral.functions.core;
 
 import org.wso2.spectral.SpectralException;
 import org.wso2.spectral.document.LintTarget;
+import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
 import java.util.List;
 import java.util.Map;
 
+@FunctionName("length")
 public class Length extends LintFunction {
 
     public Length(Map<String, Object> options) {
