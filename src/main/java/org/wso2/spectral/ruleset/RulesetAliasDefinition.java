@@ -17,6 +17,9 @@
  */
 package org.wso2.spectral.ruleset;
 
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.wso2.spectral.SpectralException;
 
 import java.util.ArrayList;
@@ -32,9 +35,9 @@ import java.util.Map;
 public class RulesetAliasDefinition {
     private final String name;
     private String description;
-    private ArrayList<RulesetAliasTarget> targets;
+    public ArrayList<RulesetAliasTarget> targets;
     private boolean isComplexAlias;
-    private ArrayList<String> given;
+    public ArrayList<String> given;
 
     public RulesetAliasDefinition(String name, Object aliasObject) throws SpectralException{
         this.name = name;
@@ -61,6 +64,38 @@ public class RulesetAliasDefinition {
 
     public boolean isComplexAlias() {
         return isComplexAlias;
+    }
+
+    public static ArrayList<String> resolveAliasGiven(String given, HashMap<String, RulesetAliasDefinition> aliases) {
+
+        ArrayList<String> resolved = new ArrayList<>();
+
+        String aliasExtractionRegex = "^#[a-zA-Z]+";
+        Pattern pattern = Pattern.compile(aliasExtractionRegex);
+        Matcher matcher = pattern.matcher(given);
+        if (!matcher.find())
+        {
+            resolved.add(given);
+            return resolved;
+        }
+        String aliasName = matcher.group(0);
+        RulesetAliasDefinition alias = aliases.get(aliasName.substring(1));
+
+        if (alias.isComplexAlias()) {
+            for (RulesetAliasTarget target : alias.targets) {
+                // TODO: Match target with document format
+                for (String g : target.given) {
+                    resolved.add(given.replaceFirst(aliasExtractionRegex, "\\" + g));
+                }
+            }
+        }
+        else {
+            for (String g : alias.given) {
+                resolved.add(given.replaceFirst(aliasExtractionRegex, "\\" + g));
+            }
+        }
+
+        return resolved;
     }
 }
 

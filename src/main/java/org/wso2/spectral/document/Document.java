@@ -26,9 +26,8 @@ import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.PathNotFoundException;
 import org.snakeyaml.engine.v2.api.Load;
 import org.snakeyaml.engine.v2.api.LoadSettings;
-import org.snakeyaml.engine.v2.api.lowlevel.Compose;
-import org.snakeyaml.engine.v2.nodes.Node;
 import org.wso2.spectral.functions.FunctionResult;
+import org.wso2.spectral.ruleset.Format;
 import org.wso2.spectral.ruleset.Rule;
 import org.wso2.spectral.ruleset.RuleThen;
 import org.wso2.spectral.ruleset.Ruleset;
@@ -46,6 +45,7 @@ public class Document {
     private String documentString;
     private Object document;
     private ArrayList<FunctionResult> results;
+    Format format;
 
     public Document(InputStream inputStream) {
         results = new ArrayList<>();
@@ -58,6 +58,23 @@ public class Document {
 
         this.document = JsonPath.parse(this.documentString).json();
         resolveReferences();
+
+        // Read format
+        Map<String, Object> documentMap = (Map<String, Object>) yamlData;
+        if (documentMap.containsKey("openapi")) {
+            String oasVersion = (String) documentMap.get("openapi");
+            if (oasVersion.startsWith("3.1")) {
+                this.format = Format.OAS3_1;
+            }
+            else if (oasVersion.startsWith("3.0")) {
+                this.format = Format.OAS3_0;
+            }
+            else
+                this.format = Format.OAS3;
+        }
+        else if (documentMap.containsKey("swagger")) {
+            this.format = Format.OAS2;
+        }
     }
 
     public ArrayList<FunctionResult> lint(Ruleset ruleset) {
@@ -67,6 +84,9 @@ public class Document {
 
         for(Rule rule : ruleset.rules.values()) {
             for(String given : rule.given) {
+                // TODO: Implement aliases
+                if (given.startsWith("#"))
+                    continue;
                 try {
                     Configuration config = Configuration.builder().options(Option.AS_PATH_LIST).build();
                     List<String> paths = JsonPath.using(config).parse(this.document).read(given);

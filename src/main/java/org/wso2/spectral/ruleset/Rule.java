@@ -17,12 +17,13 @@
  */
 package org.wso2.spectral.ruleset;
 
+import java.util.HashMap;
 import org.wso2.spectral.DiagnosticSeverity;
-import org.wso2.spectral.functions.FunctionResult;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import static org.wso2.spectral.ruleset.RulesetAliasDefinition.resolveAliasGiven;
 
 public class Rule {
     public String name;
@@ -32,10 +33,10 @@ public class Rule {
     private boolean resolved;
     public List<RuleThen> then;
     public List<String> given;
-    private List<String> formats;
+    private List<Format> formats;
     private boolean enabled;
 
-    public Rule(String name, Map<String, Object> ruleData) {
+    public Rule(String name, Map<String, Object> ruleData, HashMap<String, RulesetAliasDefinition> aliases) {
         this.name = name;
         Object descriptionObject = ruleData.get("description");
         Object messageObject = ruleData.get("message");
@@ -76,11 +77,9 @@ public class Rule {
             this.resolved = false;
         }
 
+        this.formats = new ArrayList<>();
         if (formatsObject instanceof List) {
-            this.formats = (List<String>) formatsObject;
-        }
-        else {
-            this.formats = new ArrayList<>();
+            this.formats = Format.getFormatListFromObject((List<String>) formatsObject);
         }
 
         if (thenObject instanceof List) {
@@ -112,6 +111,18 @@ public class Rule {
         else {
             throw new RuntimeException("Invalid rule given or missing");
         }
+
+        // resolve given aliases
+        ArrayList<String> resolvedGiven = new ArrayList<>();
+        for (String given : this.given) {
+            if (given.startsWith("#")) {
+                resolvedGiven.addAll(resolveAliasGiven(given, aliases));
+            }
+            else {
+                resolvedGiven.add(given);
+            }
+        }
+        this.given = resolvedGiven;
     }
 
 }

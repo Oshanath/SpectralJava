@@ -17,47 +17,52 @@
  */
 package org.wso2.spectral.ruleset;
 
-import org.snakeyaml.engine.v2.api.Load;
-import org.snakeyaml.engine.v2.api.LoadSettings;
 import org.wso2.spectral.SpectralException;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import static org.wso2.spectral.ruleset.RulesetAliasDefinition.resolveAliasGiven;
 
 public class Ruleset {
     public final Map<String, Rule> rules;
-    public final ArrayList<RulesetAliasDefinition> aliases;
+    public final HashMap<String, RulesetAliasDefinition> aliases;
     public boolean hasComplexAliases;
-    public ArrayList<String> formats;
+    public ArrayList<Format> formats;
     public ArrayList<Ruleset> extendsRulesets;
 
     public Ruleset(Map<String, Object> datamap) throws SpectralException{
         this.rules = new HashMap<>();
-        this.aliases = new ArrayList<>();
+        this.aliases = new HashMap<>();
         this.hasComplexAliases = false;
 
         assertValidRuleset(datamap);
         Map<String, Object> rules = (Map<String, Object>) datamap.get("rules");
-
-        // Read rules
-        for (Map.Entry<String, Object> entry : rules.entrySet()) {
-            String ruleName = entry.getKey();
-            Rule rule = new Rule(ruleName, (Map<String, Object>) entry.getValue());
-            this.rules.put(ruleName, rule);
-        }
 
         // Read aliases
         if(datamap.containsKey("aliases")) {
             Map<String, Object> aliases = (Map<String, Object>) datamap.get("aliases");
             for (Map.Entry<String, Object> entry : aliases.entrySet()) {
                 RulesetAliasDefinition alias = new RulesetAliasDefinition(entry.getKey(), entry.getValue());
-                this.aliases.add(alias);
+                this.aliases.put(entry.getKey(), alias);
                 if(alias.isComplexAlias()) {
                     this.hasComplexAliases = true;
                 }
             }
+        }
+
+        resolveAliasesInAliases();
+
+        // Read rules
+        for (Map.Entry<String, Object> entry : rules.entrySet()) {
+            String ruleName = entry.getKey();
+            Rule rule = new Rule(ruleName, (Map<String, Object>) entry.getValue(), this.aliases);
+            this.rules.put(ruleName, rule);
+        }
+
+        // Read formats
+        if(datamap.containsKey("formats")) {
+            this.formats = Format.getFormatListFromObject((ArrayList<String>) datamap.get("formats"));
         }
 
         // TODO: Read extends
@@ -66,6 +71,34 @@ public class Ruleset {
 
         // TODO: Merge Rules
 
+    }
+
+    private void resolveAliasesInAliases() {
+        for (RulesetAliasDefinition alias : this.aliases.values()) {
+            if (!alias.isComplexAlias()) {
+                ArrayList<String> resolvedGiven = new ArrayList<>();
+                for (String given : alias.given) {
+                    if (given.startsWith("#")) {
+                        resolvedGiven.addAll(resolveAliasGiven(given, this.aliases));
+                    }
+                    else {
+                        resolvedGiven.add(given);
+                    }
+                }
+                alias.given = resolvedGiven;
+            }
+            else{
+                for (RulesetAliasTarget target: alias.targets) {
+                    ArrayList<String> resolvedGiven = new ArrayList<>();
+                    for (String given: target.given) {
+                        if (given.startsWith("#")) {
+                            resolvedGiven.addAll(resolveAliasGiven(given, this.aliases));
+                        }
+                    }
+                    target.given = resolvedGiven;
+                }
+            }
+        }
     }
 
     private void assertValidRuleset(Object yamlData) throws SpectralException{

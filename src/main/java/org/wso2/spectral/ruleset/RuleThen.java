@@ -21,8 +21,8 @@ import org.wso2.spectral.functions.core.Alphabetical;
 import org.wso2.spectral.functions.core.Casing;
 import org.wso2.spectral.functions.core.ContainsKey;
 import org.wso2.spectral.functions.core.Defined;
-import org.wso2.spectral.functions.core.DoNothing;
 import org.wso2.spectral.functions.LintFunction;
+import org.wso2.spectral.functions.core.Falsy;
 import org.wso2.spectral.functions.core.Length;
 import org.wso2.spectral.functions.core.Pattern;
 import org.wso2.spectral.functions.core.Schema;
@@ -44,7 +44,10 @@ public class RuleThen {
         this.functionOptions = (Map<String, Object>) ruleThenData.get("functionOptions");
 
         if (this.function.equals("truthy")) {
-            this.lintFunction = new Truthy(functionOptions);
+            this.lintFunction = new Truthy();
+        }
+        else if (this.function.equals("falsy")) {
+            this.lintFunction = new Falsy();
         }
         else if (this.function.equals("pattern")) {
             this.lintFunction = new Pattern(functionOptions);

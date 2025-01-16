@@ -21,6 +21,7 @@ import org.wso2.spectral.document.LintTarget;
 import org.wso2.spectral.functions.LintFunction;
 
 import java.util.Map;
+import java.util.regex.PatternSyntaxException;
 
 public class Pattern extends LintFunction {
 
@@ -29,8 +30,26 @@ public class Pattern extends LintFunction {
     }
 
     public boolean execute(LintTarget target) {
-        // TODO: Implement notMatch
         Object match = options.get("match");
-        return target.value.toString().matches((String) match);
+        Object notMatch = options.get("notMatch");
+
+        if (target.value == null) {
+            return false;
+        }
+        if (!(target.value instanceof String)) {
+            return true;
+        }
+
+        try {
+            if (match != null)
+                return target.value.toString().matches((String) match);
+            else if (notMatch != null)
+                return !target.value.toString().matches((String) notMatch);
+            else
+                throw new RuntimeException("Pattern function requires either match or notMatch options");
+        } catch (PatternSyntaxException e) {
+            System.out.println("Invalid regex pattern: " + e.getDescription());
+            return false;
+        }
     }
 }

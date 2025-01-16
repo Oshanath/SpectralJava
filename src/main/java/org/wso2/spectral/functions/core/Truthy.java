@@ -25,8 +25,8 @@ import java.util.Map;
 
 public class Truthy extends LintFunction {
 
-    public Truthy(Map<String, Object> options) {
-        super(options);
+    public Truthy() {
+        super(null);
     }
 
     public boolean execute(LintTarget target) {

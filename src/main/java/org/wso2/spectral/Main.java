@@ -19,8 +19,6 @@ package org.wso2.spectral;
 
 import org.wso2.spectral.document.Document;
 import org.wso2.spectral.functions.FunctionResult;
-import org.wso2.spectral.ruleset.Ruleset;
-import org.wso2.spectral.ruleset.fileType.JsonRuleset;
 import org.wso2.spectral.ruleset.fileType.YamlRuleset;
 
 import java.io.FileInputStream;
@@ -32,8 +30,20 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            InputStream rulesetStream = new FileInputStream("/Users/oshanath/spectral/ruleset.yaml");
+//            InputStream rulesetStream = new FileInputStream("/Users/oshanath/spectral/ruleset.yaml");
+//            YamlRuleset ruleset = new YamlRuleset(rulesetStream);
+
+            InputStream rulesetStream = new FileInputStream("/Users/oshanath/spectral/rulesets/APIM Team Best Practices.yaml");
             YamlRuleset ruleset = new YamlRuleset(rulesetStream);
+
+//            InputStream rulesetStream = new FileInputStream("/Users/oshanath/spectral/rulesets/OWASP Top 10.json");
+//            Ruleset ruleset = new JsonRuleset(rulesetStream);
+
+//            InputStream rulesetStream = new FileInputStream("/Users/oshanath/spectral/rulesets/WSO2 API Design Guidelines.json");
+//            Ruleset ruleset = new JsonRuleset(rulesetStream);
+
+//            InputStream rulesetStream = new FileInputStream("/Users/oshanath/spectral/rulesets/WSO2 Style Guidelines.json");
+//            Ruleset ruleset = new JsonRuleset(rulesetStream);
 
             InputStream documentStream = new FileInputStream("/Users/oshanath/spectral/opeapitest.yaml");
             Document document = new Document(documentStream);
@@ -48,6 +58,18 @@ public class Main {
             if(allPassed){
                 System.out.println("All rules passed");
             }
+            int passCount = 0;
+            int failCount = 0;
+            for (FunctionResult result : results) {
+                if(result.passed){
+                    passCount++;
+                }
+                else{
+                    failCount++;
+                }
+            }
+            System.out.println("Pass count: " + passCount);
+            System.out.println("Fail count: " + failCount);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (SpectralException e) {
