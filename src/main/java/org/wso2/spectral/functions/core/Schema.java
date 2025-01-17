@@ -26,6 +26,9 @@ import org.wso2.spectral.functions.LintFunction;
 
 import java.util.Map;
 
+/**
+ * This class implements the schema function.
+ */
 @FunctionName("schema")
 public class Schema extends LintFunction {
 
@@ -42,7 +45,7 @@ public class Schema extends LintFunction {
         JSONObject schemaObject = new JSONObject(schema);
         org.everit.json.schema.Schema everitSchema = SchemaLoader.load(schemaObject);
 
-        try{
+        try {
             everitSchema.validate(targetObject);
         } catch (org.everit.json.schema.ValidationException e) {
             return false;

@@ -17,6 +17,9 @@
  */
 package org.wso2.spectral;
 
+/**
+ * Enum to represent the severity of a rule
+ */
 public enum DiagnosticSeverity {
     ERROR,
     WARN,

@@ -17,11 +17,14 @@
  */
 package org.wso2.spectral.functions;
 
-import org.wso2.spectral.InvalidFunctionOptionsException;
 import org.wso2.spectral.document.LintTarget;
 
 import java.util.Map;
 
+/**
+ * Abstract class to represent a lint function. All lint functions should extend this class and implement the execute
+ * method.
+ */
 public abstract class LintFunction {
 
     public Map<String, Object> options;

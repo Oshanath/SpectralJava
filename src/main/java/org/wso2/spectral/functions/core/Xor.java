@@ -24,6 +24,9 @@ import org.wso2.spectral.functions.LintFunction;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * Xor function implementation
+ */
 @FunctionName("xor")
 public class Xor extends LintFunction {
 
@@ -40,8 +43,7 @@ public class Xor extends LintFunction {
                 if (map.containsKey(property)) {
                     count++;
                 }
-            }
-            else {
+            } else {
                 throw new RuntimeException("Xor function can only be used with objects");
             }
         }

@@ -23,6 +23,9 @@ import org.wso2.spectral.functions.LintFunction;
 
 import java.util.Map;
 
+/**
+ * Function to check if a value is defined
+ */
 @FunctionName("defined")
 public class Defined extends LintFunction {
 

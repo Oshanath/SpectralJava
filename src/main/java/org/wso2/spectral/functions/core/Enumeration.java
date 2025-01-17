@@ -23,6 +23,9 @@ import org.wso2.spectral.functions.LintFunction;
 
 import java.util.Map;
 
+/**
+ * Enumeration function to check whether a value is contained in a set of values
+ */
 @FunctionName("enumeration")
 public class Enumeration extends LintFunction {
 

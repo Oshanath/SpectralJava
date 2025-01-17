@@ -15,17 +15,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.spectral.ruleset.fileType;
+package org.wso2.spectral.ruleset.file.type;
 
-import com.jayway.jsonpath.JsonPath;
-import org.wso2.spectral.SpectralException;
+import org.snakeyaml.engine.v2.api.Load;
+import org.snakeyaml.engine.v2.api.LoadSettings;
 import org.wso2.spectral.ruleset.Ruleset;
 
 import java.io.InputStream;
 import java.util.Map;
 
-public class JsonRuleset extends Ruleset {
-    public JsonRuleset(InputStream rulesetStream) throws SpectralException {
-        super((Map<String, Object>) JsonPath.parse(rulesetStream).json());
+/**
+ * This class is used to load a yaml ruleset file
+ */
+public class YamlRuleset extends Ruleset {
+    public YamlRuleset(InputStream rulesetStream) {
+        super((Map<String, Object>) (new Load(LoadSettings.builder().build())).loadFromInputStream(rulesetStream));
     }
 }

@@ -40,15 +40,16 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Document class to represent a target document for rules to be applied.
+ */
 public class Document {
 
     private String documentString;
     private Object document;
-    private ArrayList<FunctionResult> results;
     Format format;
 
     public Document(InputStream inputStream) {
-        results = new ArrayList<>();
         LoadSettings settings = LoadSettings.builder().build();
         Load yamlLoader = new Load(settings);
         Object yamlData = yamlLoader.loadFromInputStream(inputStream);
@@ -65,14 +66,12 @@ public class Document {
             String oasVersion = (String) documentMap.get("openapi");
             if (oasVersion.startsWith("3.1")) {
                 this.format = Format.OAS3_1;
-            }
-            else if (oasVersion.startsWith("3.0")) {
+            } else if (oasVersion.startsWith("3.0")) {
                 this.format = Format.OAS3_0;
-            }
-            else
+            } else {
                 this.format = Format.OAS3;
-        }
-        else if (documentMap.containsKey("swagger")) {
+            }
+        } else if (documentMap.containsKey("swagger")) {
             this.format = Format.OAS2;
         }
     }
@@ -82,24 +81,26 @@ public class Document {
 
         // TODO: Filter enabled and relevant rules
 
-        for(Rule rule : ruleset.rules.values()) {
-            for(String given : rule.given) {
+        ArrayList<FunctionResult> results = new ArrayList<>();
+
+        for (Rule rule : ruleset.rules.values()) {
+            for (String given : rule.given) {
                 // TODO: Implement aliases
-                if (given.startsWith("#"))
+                if (given.startsWith("#")) {
                     continue;
+                }
                 try {
                     Configuration config = Configuration.builder().options(Option.AS_PATH_LIST).build();
                     List<String> paths = JsonPath.using(config).parse(this.document).read(given);
                     for (String path : paths) {
-                        lintNode(path, rule);
+                        results.addAll(lintNode(path, rule));
                     }
-                    System.out.println("Json Path resolved: " + given);
-                } catch(PathNotFoundException e) {
-                    System.out.println("Json Path not found: " + given);
+                    // log("Json Path resolved: " + given);
+                } catch (PathNotFoundException e) {
+                    // log("Json Path not found: " + given);
                 } catch (InvalidPathException e) {
-                    System.out.println("Unsupported Json Path: " + given);
+                    // log("Unsupported Json Path: " + given);
                     // TODO: Implement json path plus features
-//                    e.printStackTrace();
                 }
             }
         }
@@ -119,12 +120,13 @@ public class Document {
          */
     }
 
-    private void lintNode(String path, Rule rule) {
+    private ArrayList<FunctionResult> lintNode(String path, Rule rule) {
+        ArrayList<FunctionResult> results = new ArrayList<>();
         Object node;
         try {
             node = JsonPath.read(this.document, path);
         } catch (PathNotFoundException e) {
-            return;
+            return results;
         }
         for (RuleThen then : rule.then) {
             ArrayList<LintTarget> lintTargets = getLintTargets(node, then);
@@ -135,6 +137,7 @@ public class Document {
                 results.add(new FunctionResult(result, path + targetPath, rule.message, rule));
             }
         }
+        return results;
     }
 
     private ArrayList<LintTarget> getLintTargets(Object node, RuleThen then) {
@@ -147,20 +150,17 @@ public class Document {
                     for (String key : map.keySet()) {
                         lintTargets.add(new LintTarget(new ArrayList<>(Arrays.asList(key)), key));
                     }
-                }
-                else if (node instanceof List) {
+                } else if (node instanceof List) {
                     // TODO: Test
                     List<Object> list = (List<Object>) node;
                     for (int i = 0; i < list.size(); i++) {
                         lintTargets.add(new LintTarget(new ArrayList<>(Arrays.asList(String.valueOf(i))),
                                 String.valueOf(i)));
                     }
-                }
-                else {
+                } else {
                     throw new RuntimeException("Node is not a Map or List but the field is @key");
                 }
-            }
-            else if (then.field.startsWith("$")) {
+            } else if (then.field.startsWith("$")) {
                 Configuration config = Configuration.builder().options(Option.AS_PATH_LIST).build();
                 List<String> paths;
                 try {
@@ -175,10 +175,11 @@ public class Document {
                     try {
                         value = JsonPath.read(node, path);
                         lintTargets.add(new LintTarget(splitPath, value));
-                    } catch (PathNotFoundException ignored) {}
+                    } catch (PathNotFoundException ignored) {
+
+                    }
                 }
-            }
-            else {
+            } else {
                 ArrayList<String> path = toPath(then.field);
                 Object value;
                 try {
@@ -188,8 +189,7 @@ public class Document {
                     lintTargets.add(new LintTarget(path, null));
                 }
             }
-        }
-        else {
+        } else {
             lintTargets.add(new LintTarget(new ArrayList<>(), node));
         }
 

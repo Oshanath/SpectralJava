@@ -2,8 +2,10 @@ package org.wso2.spectral.ruleset;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+/**
+ * Enum for the supported document formats
+ */
 public enum Format {
     ARAZZO1_0,
     AAS2,

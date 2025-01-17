@@ -17,14 +17,12 @@
  */
 package org.wso2.spectral.ruleset;
 
-import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import org.wso2.spectral.SpectralException;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Class to represent a ruleset alias definition.
@@ -37,16 +35,15 @@ public class RulesetAliasDefinition {
     private String description;
     public ArrayList<RulesetAliasTarget> targets;
     private boolean isComplexAlias;
-    public ArrayList<String> given;
+    public List<String> given;
 
-    public RulesetAliasDefinition(String name, Object aliasObject) throws SpectralException{
+    public RulesetAliasDefinition(String name, Object aliasObject) {
         this.name = name;
 
         if (aliasObject instanceof List) {
             isComplexAlias = false;
-            this.given = (ArrayList<String>) aliasObject;
-        }
-        else if (aliasObject instanceof Map) {
+            this.given = (List<String>) aliasObject;
+        } else if (aliasObject instanceof Map) {
             isComplexAlias = true;
             Map<String, Object> aliasMap = (Map<String, Object>) aliasObject;
             this.description = (String) aliasMap.get("description");
@@ -56,9 +53,6 @@ public class RulesetAliasDefinition {
                 RulesetAliasTarget aliasTarget = new RulesetAliasTarget(target);
                 this.targets.add(aliasTarget);
             }
-        }
-        else {
-            throw new SpectralException("Invalid alias definition.");
         }
     }
 
@@ -73,8 +67,7 @@ public class RulesetAliasDefinition {
         String aliasExtractionRegex = "^#[a-zA-Z]+";
         Pattern pattern = Pattern.compile(aliasExtractionRegex);
         Matcher matcher = pattern.matcher(given);
-        if (!matcher.find())
-        {
+        if (!matcher.find()) {
             resolved.add(given);
             return resolved;
         }
@@ -88,8 +81,7 @@ public class RulesetAliasDefinition {
                     resolved.add(given.replaceFirst(aliasExtractionRegex, "\\" + g));
                 }
             }
-        }
-        else {
+        } else {
             for (String g : alias.given) {
                 resolved.add(given.replaceFirst(aliasExtractionRegex, "\\" + g));
             }

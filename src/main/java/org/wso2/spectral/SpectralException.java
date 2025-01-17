@@ -17,6 +17,9 @@
  */
 package org.wso2.spectral;
 
+/**
+ * Exception class for Spectral
+ */
 public class SpectralException extends Exception {
     public SpectralException(String message) {
         super(message);

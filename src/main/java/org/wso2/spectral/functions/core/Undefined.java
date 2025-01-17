@@ -17,11 +17,15 @@
  */
 package org.wso2.spectral.functions.core;
 
-import java.util.Map;
 import org.wso2.spectral.document.LintTarget;
 import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
+import java.util.Map;
+
+/**
+ * Function to check if a value is undefined
+ */
 @FunctionName("undefined")
 public class Undefined extends LintFunction {
 

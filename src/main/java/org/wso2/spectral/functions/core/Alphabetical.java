@@ -23,6 +23,9 @@ import org.wso2.spectral.functions.LintFunction;
 
 import java.util.Map;
 
+/**
+ * Function to check if the given string is alphabetical
+ */
 @FunctionName("alphabetical")
 public class Alphabetical extends LintFunction {
 

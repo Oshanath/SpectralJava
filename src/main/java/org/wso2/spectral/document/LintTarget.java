@@ -19,6 +19,9 @@ package org.wso2.spectral.document;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents a lint target in a document.
+ */
 public class LintTarget {
     public ArrayList<String> jsonPath;
     public final Object value;

@@ -22,6 +22,9 @@ import org.wso2.spectral.functions.LintFunction;
 
 import java.util.Map;
 
+/**
+ * Represents the "then" part of a rule. Applies to each target identified by the "given" of the rule.
+ */
 public class RuleThen {
     public String field;
     private String function;
