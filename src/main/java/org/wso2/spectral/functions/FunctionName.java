@@ -15,18 +15,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.spectral.ruleset.fileType;
+package org.wso2.spectral.functions;
 
-import org.snakeyaml.engine.v2.api.Load;
-import org.snakeyaml.engine.v2.api.LoadSettings;
-import org.wso2.spectral.SpectralException;
-import org.wso2.spectral.ruleset.Ruleset;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-import java.io.InputStream;
-import java.util.Map;
-
-public class YamlRuleset extends Ruleset{
-    public YamlRuleset(InputStream rulesetStream) throws SpectralException {
-        super((Map<String, Object>) (new Load(LoadSettings.builder().build())).loadFromInputStream(rulesetStream));
-    }
+/**
+ * Annotation to specify the name of the function to be loaded in runtime to the functions factory
+ */
+@Retention(RetentionPolicy.RUNTIME)
+public @interface FunctionName {
+    String value();
 }

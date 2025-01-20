@@ -17,13 +17,17 @@
  */
 package org.wso2.spectral.functions.core;
 
-import org.wso2.spectral.SpectralException;
 import org.wso2.spectral.document.LintTarget;
+import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Length function implementation
+ */
+@FunctionName("length")
 public class Length extends LintFunction {
 
     public Length(Map<String, Object> options) {
@@ -47,16 +51,13 @@ public class Length extends LintFunction {
             int min = (int) options.get("min");
             int max = (int) options.get("max");
             return length >= min && length <= max;
-        }
-       else  if (options.containsKey("min")) {
+        } else  if (options.containsKey("min")) {
             int min = (int) options.get("min");
             return length >= min;
-        }
-        else if (options.containsKey("max")) {
+        } else if (options.containsKey("max")) {
             int max = (int) options.get("max");
             return length <= max;
-        }
-        else {
+        } else {
             return false;
         }
     }

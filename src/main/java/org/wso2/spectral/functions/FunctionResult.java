@@ -19,11 +19,14 @@ package org.wso2.spectral.functions;
 
 import org.wso2.spectral.ruleset.Rule;
 
+/**
+ * Represents the result of a function execution
+ */
 public class FunctionResult {
-    public boolean passed;
-    public String path;
-    public String message;
-    public Rule rule;
+    public final boolean passed;
+    public final String path;
+    public final String message;
+    public final Rule rule;
 
     public FunctionResult(boolean passed, String path, String message, Rule rule) {
         this.passed = passed;

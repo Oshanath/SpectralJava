@@ -17,17 +17,21 @@
  */
 package org.wso2.spectral.ruleset;
 
-import java.util.HashMap;
+import com.sun.tools.javac.util.StringUtils;
 import org.wso2.spectral.DiagnosticSeverity;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import static org.wso2.spectral.ruleset.RulesetAliasDefinition.resolveAliasGiven;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Rule class to represent a rule in a ruleset.
+ */
 public class Rule {
     public String name;
-    public String description;
+    private String description;
     public String message;
     private DiagnosticSeverity severity;
     private boolean resolved;
@@ -51,29 +55,25 @@ public class Rule {
 
         if (descriptionObject instanceof String) {
             this.description = (String) descriptionObject;
-        }
-        else {
+        } else {
             this.description = "";
         }
 
         if (messageObject instanceof String) {
             this.message = (String) messageObject;
-        }
-        else {
+        } else {
             this.message = "";
         }
 
         if (severityObject instanceof String) {
-            this.severity = DiagnosticSeverity.valueOf(((String) severityObject).toUpperCase());
-        }
-        else {
+            this.severity = DiagnosticSeverity.valueOf(StringUtils.toUpperCase((String) severityObject));
+        } else {
             this.severity = DiagnosticSeverity.ERROR;
         }
 
         if (resolvedObject instanceof Boolean) {
             this.resolved = (Boolean) resolvedObject;
-        }
-        else {
+        } else {
             this.resolved = false;
         }
 
@@ -85,31 +85,18 @@ public class Rule {
         if (thenObject instanceof List) {
             this.then = new ArrayList<>();
             for (Object thenItem : (List<Object>) thenObject) {
-                if (thenItem instanceof Map) {
-                    this.then.add(new RuleThen((Map<String, Object>) thenItem));
-                }
-                else {
-                    throw new RuntimeException("Invalid rule then or missing");
-                }
+                this.then.add(new RuleThen((Map<String, Object>) thenItem));
             }
-        }
-        else if (thenObject instanceof Map) {
+        } else if (thenObject instanceof Map) {
             this.then = new ArrayList<>();
             this.then.add(new RuleThen((Map<String, Object>) thenObject));
-        }
-        else {
-            throw new RuntimeException("Invalid rule then or missing");
         }
 
         if (givenObject instanceof List) {
             this.given = (List<String>) givenObject;
-        }
-        else if (givenObject instanceof String) {
+        } else if (givenObject instanceof String) {
             this.given = new ArrayList<>();
             this.given.add((String) givenObject);
-        }
-        else {
-            throw new RuntimeException("Invalid rule given or missing");
         }
 
         // resolve given aliases
@@ -117,8 +104,7 @@ public class Rule {
         for (String given : this.given) {
             if (given.startsWith("#")) {
                 resolvedGiven.addAll(resolveAliasGiven(given, aliases));
-            }
-            else {
+            } else {
                 resolvedGiven.add(given);
             }
         }

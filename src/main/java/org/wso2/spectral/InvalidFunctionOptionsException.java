@@ -17,6 +17,9 @@
  */
 package org.wso2.spectral;
 
+/**
+ * Exception class to handle invalid function options.
+ */
 public class InvalidFunctionOptionsException extends Exception {
     public InvalidFunctionOptionsException(String message) {
         super(message);

@@ -15,18 +15,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.spectral.functions.core;
+package org.wso2.spectral.ruleset.file.type;
 
-import org.wso2.spectral.document.LintTarget;
-import org.wso2.spectral.functions.LintFunction;
+import org.snakeyaml.engine.v2.api.Load;
+import org.snakeyaml.engine.v2.api.LoadSettings;
+import org.wso2.spectral.ruleset.Ruleset;
 
-public class DoNothing extends LintFunction {
+import java.io.InputStream;
+import java.util.Map;
 
-        public DoNothing() {
-            super(null);
-        }
-
-        public boolean execute(LintTarget target) {
-            return true;
-        }
+/**
+ * This class is used to load a yaml ruleset file
+ */
+public class YamlRuleset extends Ruleset {
+    public YamlRuleset(InputStream rulesetStream) {
+        super((Map<String, Object>) (new Load(LoadSettings.builder().build())).loadFromInputStream(rulesetStream));
+    }
 }

@@ -17,21 +17,22 @@
  */
 package org.wso2.spectral.ruleset;
 
-import org.wso2.spectral.SpectralException;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import static org.wso2.spectral.ruleset.RulesetAliasDefinition.resolveAliasGiven;
 
+/**
+ * Ruleset class represents a set of rules that can be applied to a document.
+ */
 public class Ruleset {
     public final Map<String, Rule> rules;
     public final HashMap<String, RulesetAliasDefinition> aliases;
-    public boolean hasComplexAliases;
-    public ArrayList<Format> formats;
-    public ArrayList<Ruleset> extendsRulesets;
+    private boolean hasComplexAliases;
+    private ArrayList<Format> formats;
+    private ArrayList<Ruleset> extendsRulesets;
 
-    public Ruleset(Map<String, Object> datamap) throws SpectralException{
+    public Ruleset(Map<String, Object> datamap) {
         this.rules = new HashMap<>();
         this.aliases = new HashMap<>();
         this.hasComplexAliases = false;
@@ -40,12 +41,12 @@ public class Ruleset {
         Map<String, Object> rules = (Map<String, Object>) datamap.get("rules");
 
         // Read aliases
-        if(datamap.containsKey("aliases")) {
+        if (datamap.containsKey("aliases")) {
             Map<String, Object> aliases = (Map<String, Object>) datamap.get("aliases");
             for (Map.Entry<String, Object> entry : aliases.entrySet()) {
                 RulesetAliasDefinition alias = new RulesetAliasDefinition(entry.getKey(), entry.getValue());
                 this.aliases.put(entry.getKey(), alias);
-                if(alias.isComplexAlias()) {
+                if (alias.isComplexAlias()) {
                     this.hasComplexAliases = true;
                 }
             }
@@ -61,7 +62,7 @@ public class Ruleset {
         }
 
         // Read formats
-        if(datamap.containsKey("formats")) {
+        if (datamap.containsKey("formats")) {
             this.formats = Format.getFormatListFromObject((ArrayList<String>) datamap.get("formats"));
         }
 
@@ -80,14 +81,12 @@ public class Ruleset {
                 for (String given : alias.given) {
                     if (given.startsWith("#")) {
                         resolvedGiven.addAll(resolveAliasGiven(given, this.aliases));
-                    }
-                    else {
+                    } else {
                         resolvedGiven.add(given);
                     }
                 }
                 alias.given = resolvedGiven;
-            }
-            else{
+            } else {
                 for (RulesetAliasTarget target: alias.targets) {
                     ArrayList<String> resolvedGiven = new ArrayList<>();
                     for (String given: target.given) {
@@ -101,14 +100,7 @@ public class Ruleset {
         }
     }
 
-    private void assertValidRuleset(Object yamlData) throws SpectralException{
-        if(!(yamlData instanceof  Map)) {
-            throw new SpectralException("Invalid ruleset definition. Invalid YAML format");
-        }
-        Map<String, Object> yamlMap = (Map<String, Object>) yamlData;
-        if(!yamlMap.containsKey("rules") && !yamlMap.containsKey("extends") && !yamlMap.containsKey("overrides")) {
-            throw new SpectralException("Invalid ruleset definition. Ruleset must have rules or extends or overrides defined");
-        }
+    private void assertValidRuleset(Object yamlData) {
 
         // TODO: Validate aliases
 

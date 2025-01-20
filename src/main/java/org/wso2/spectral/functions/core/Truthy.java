@@ -18,28 +18,30 @@
 package org.wso2.spectral.functions.core;
 
 import org.wso2.spectral.document.LintTarget;
+import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Function to check if a value is truthy
+ */
+@FunctionName("truthy")
 public class Truthy extends LintFunction {
 
-    public Truthy() {
+    public Truthy(Map<String, Object> options) {
         super(null);
     }
 
     public boolean execute(LintTarget target) {
         if (target.value instanceof String) {
             return !((String) target.value).isEmpty();
-        }
-        else if (target.value instanceof List) {
+        } else if (target.value instanceof List) {
             return !((List) target.value).isEmpty();
-        }
-        else if (target.value instanceof Map) {
+        } else if (target.value instanceof Map) {
             return !((Map) target.value).isEmpty();
-        }
-        else {
+        } else {
             return target.value != null;
         }
     }

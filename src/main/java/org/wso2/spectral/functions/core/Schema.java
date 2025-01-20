@@ -21,10 +21,15 @@ import com.google.gson.Gson;
 import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONObject;
 import org.wso2.spectral.document.LintTarget;
+import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
 import java.util.Map;
 
+/**
+ * This class implements the schema function.
+ */
+@FunctionName("schema")
 public class Schema extends LintFunction {
 
     public Schema(Map<String, Object> options) {
@@ -40,7 +45,7 @@ public class Schema extends LintFunction {
         JSONObject schemaObject = new JSONObject(schema);
         org.everit.json.schema.Schema everitSchema = SchemaLoader.load(schemaObject);
 
-        try{
+        try {
             everitSchema.validate(targetObject);
         } catch (org.everit.json.schema.ValidationException e) {
             return false;

@@ -18,22 +18,27 @@
 package org.wso2.spectral.functions.core;
 
 import org.wso2.spectral.document.LintTarget;
+import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
 import java.util.Map;
 import java.util.regex.Pattern;
 
+/**
+ * Function to check the casing of a string
+ */
+@FunctionName("casing")
 public class Casing extends LintFunction {
 
-    private final String flat = "[a-z][a-z{__DIGITS__}]*";
-    private final String camel = "[a-z][a-z{__DIGITS__}]*(?:[A-Z{__DIGITS__}](?:[a-z{__DIGITS__}]+|$))*";
-    private final String pascal = "[A-Z][a-z{__DIGITS__}]*(?:[A-Z{__DIGITS__}](?:[a-z{__DIGITS__}]+|$))*";
-    private final String kebab = "[a-z][a-z{__DIGITS__}]*(?:-[a-z{__DIGITS__}]+)*";
-    private final String cobol = "[A-Z][A-Z{__DIGITS__}]*(?:-[A-Z{__DIGITS__}]+)*";
-    private final String snake = "[a-z][a-z{__DIGITS__}]*(?:_[a-z{__DIGITS__}]+)*";
-    private final String macro = "[A-Z][A-Z{__DIGITS__}]*(?:_[A-Z{__DIGITS__}]+)*";
+    private static final String flat = "[a-z][a-z{__DIGITS__}]*";
+    private static final String camel = "[a-z][a-z{__DIGITS__}]*(?:[A-Z{__DIGITS__}](?:[a-z{__DIGITS__}]+|$))*";
+    private static final String pascal = "[A-Z][a-z{__DIGITS__}]*(?:[A-Z{__DIGITS__}](?:[a-z{__DIGITS__}]+|$))*";
+    private static final String kebab = "[a-z][a-z{__DIGITS__}]*(?:-[a-z{__DIGITS__}]+)*";
+    private static final String cobol = "[A-Z][A-Z{__DIGITS__}]*(?:-[A-Z{__DIGITS__}]+)*";
+    private static final String snake = "[a-z][a-z{__DIGITS__}]*(?:_[a-z{__DIGITS__}]+)*";
+    private static final String macro = "[A-Z][A-Z{__DIGITS__}]*(?:_[A-Z{__DIGITS__}]+)*";
 
-    private final String digitPattern = "0-9";
+    private static final String digitPattern = "0-9";
 
     public Casing(Map<String, Object> options) {
         super(options);
@@ -42,7 +47,7 @@ public class Casing extends LintFunction {
     public boolean execute(LintTarget target) {
         String targetString = (String) target.value;
 
-        if(targetString.length() == 1 &&
+        if (targetString.length() == 1 &&
                 options.containsKey("separator") &&
                 (boolean) options.get("separator.allowLeading") &&
                 targetString.equals(((Map<String, Object>) options.get("separator")).get("char"))) {

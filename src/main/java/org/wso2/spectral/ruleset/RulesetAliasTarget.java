@@ -17,20 +17,21 @@
  */
 package org.wso2.spectral.ruleset;
 
-import java.util.List;
-import org.wso2.spectral.SpectralException;
-
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+/**
+ * This class represents the target of a ruleset alias which contains the list of formats it should apply to and the
+ * given path.
+ */
 public class RulesetAliasTarget {
     private ArrayList<Format> formats;
     public ArrayList<String> given;
 
-    public RulesetAliasTarget (Object targetObject) throws SpectralException {
+    public RulesetAliasTarget (Object targetObject) {
         if (targetObject instanceof Map) {
-            HashMap<String, Object> targetMap = (HashMap<String, Object>) targetObject;
+            Map<String, Object> targetMap = (Map<String, Object>) targetObject;
             this.formats = Format.getFormatListFromObject((List<String>) targetMap.get("formats"));
             this.given = (ArrayList<String>) targetMap.get("given");
         }

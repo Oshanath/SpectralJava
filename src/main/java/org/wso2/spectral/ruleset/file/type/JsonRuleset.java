@@ -15,26 +15,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.spectral.functions.core;
+package org.wso2.spectral.ruleset.file.type;
 
-import org.wso2.spectral.document.LintTarget;
-import org.wso2.spectral.functions.LintFunction;
+import com.jayway.jsonpath.JsonPath;
+import org.wso2.spectral.ruleset.Ruleset;
 
+import java.io.InputStream;
 import java.util.Map;
 
-public class ContainsKey extends LintFunction {
-
-    public ContainsKey(Map<String, Object> options) {
-        super(options);
-    }
-
-    public boolean execute(LintTarget target) {
-        if (target.value instanceof Map) {
-            Object key = options.get("key");
-            return ((Map) target.value).containsKey(key);
-        }
-        else {
-            return false;
-        }
+/**
+ * This class is used to parse a JSON ruleset file.
+ */
+public class JsonRuleset extends Ruleset {
+    public JsonRuleset(InputStream rulesetStream) {
+        super((Map<String, Object>) JsonPath.parse(rulesetStream).json());
     }
 }
