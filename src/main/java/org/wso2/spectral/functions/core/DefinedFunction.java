@@ -22,39 +22,18 @@ import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
 import java.util.Map;
-import java.util.regex.PatternSyntaxException;
 
 /**
- * Pattern function implementation
+ * Function to check if a value is defined
  */
-@FunctionName("pattern")
-public class Pattern extends LintFunction {
+@FunctionName("defined")
+public class DefinedFunction extends LintFunction {
 
-    public Pattern(Map<String, Object> options) {
-        super(options);
+    public DefinedFunction(Map<String, Object> options) {
+        super(null);
     }
 
     public boolean execute(LintTarget target) {
-        Object match = options.get("match");
-        Object notMatch = options.get("notMatch");
-
-        if (target.value == null) {
-            return false;
-        }
-        if (!(target.value instanceof String)) {
-            return true;
-        }
-
-        try {
-            if (match != null) {
-                return target.value.toString().matches((String) match);
-            } else if (notMatch != null) {
-                return !target.value.toString().matches((String) notMatch);
-            } else {
-                throw new RuntimeException("Pattern function requires either match or notMatch options");
-            }
-        } catch (PatternSyntaxException e) {
-            return false;
-        }
+        return target.value != null;
     }
 }

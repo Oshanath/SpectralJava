@@ -30,9 +30,9 @@ import java.util.Map;
  * This class implements the schema function.
  */
 @FunctionName("schema")
-public class Schema extends LintFunction {
+public class SchemaFunction extends LintFunction {
 
-    public Schema(Map<String, Object> options) {
+    public SchemaFunction(Map<String, Object> options) {
         super(options);
     }
 

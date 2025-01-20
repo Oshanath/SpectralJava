@@ -21,28 +21,20 @@ import org.wso2.spectral.document.LintTarget;
 import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
-import java.util.List;
 import java.util.Map;
 
 /**
- * Falsy function implementation
+ * Function to check if the given string is alphabetical
  */
-@FunctionName("falsy")
-public class Falsy extends LintFunction {
+@FunctionName("alphabetical")
+public class AlphabeticalFunction extends LintFunction {
 
-    public Falsy(Map<String, Object> options) {
-        super(null);
+    public AlphabeticalFunction(Map<String, Object> options) {
+        super(options);
     }
 
     public boolean execute(LintTarget target) {
-        if (target.value instanceof String) {
-            return ((String) target.value).isEmpty();
-        } else if (target.value instanceof List) {
-            return ((List) target.value).isEmpty();
-        } else if (target.value instanceof Map) {
-            return ((Map) target.value).isEmpty();
-        } else {
-            return target.value == null;
-        }
+        return target.value.toString().matches("^[a-zA-Z\\s.,!?;:'\"-]*$");
     }
+
 }

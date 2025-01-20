@@ -21,33 +21,28 @@ import org.wso2.spectral.document.LintTarget;
 import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
- * Xor function implementation
+ * Falsy function implementation
  */
-@FunctionName("xor")
-public class Xor extends LintFunction {
+@FunctionName("falsy")
+public class FalsyFunction extends LintFunction {
 
-    public Xor(Map<String, Object> options) {
-        super(options);
+    public FalsyFunction(Map<String, Object> options) {
+        super(null);
     }
 
     public boolean execute(LintTarget target) {
-        ArrayList<String> properties = (ArrayList<String>) options.get("properties");
-        int count = 0;
-        for (String property : properties) {
-            if (target.value instanceof Map) {
-                Map<String, Object> map = (Map<String, Object>) target.value;
-                if (map.containsKey(property)) {
-                    count++;
-                }
-            } else {
-                throw new RuntimeException("Xor function can only be used with objects");
-            }
+        if (target.value instanceof String) {
+            return ((String) target.value).isEmpty();
+        } else if (target.value instanceof List) {
+            return ((List) target.value).isEmpty();
+        } else if (target.value instanceof Map) {
+            return ((Map) target.value).isEmpty();
+        } else {
+            return target.value == null;
         }
-
-        return count == 1;
     }
 }

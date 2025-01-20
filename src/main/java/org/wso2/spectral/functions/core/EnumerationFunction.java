@@ -24,17 +24,22 @@ import org.wso2.spectral.functions.LintFunction;
 import java.util.Map;
 
 /**
- * Function to check if the given string is alphabetical
+ * Enumeration function to check whether a value is contained in a set of values
  */
-@FunctionName("alphabetical")
-public class Alphabetical extends LintFunction {
+@FunctionName("enumeration")
+public class EnumerationFunction extends LintFunction {
 
-    public Alphabetical(Map<String, Object> options) {
+    public EnumerationFunction(Map<String, Object> options) {
         super(options);
     }
 
     public boolean execute(LintTarget target) {
-        return target.value.toString().matches("^[a-zA-Z\\s.,!?;:'\"-]*$");
+        String[] values = (String[]) options.get("values");
+        for (String value : values) {
+            if (target.value.equals(value)) {
+                return true;
+            }
+        }
+        return false;
     }
-
 }

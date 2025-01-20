@@ -21,19 +21,33 @@ import org.wso2.spectral.document.LintTarget;
 import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
- * Function to check if a value is defined
+ * Xor function implementation
  */
-@FunctionName("defined")
-public class Defined extends LintFunction {
+@FunctionName("xor")
+public class XorFunction extends LintFunction {
 
-    public Defined(Map<String, Object> options) {
-        super(null);
+    public XorFunction(Map<String, Object> options) {
+        super(options);
     }
 
     public boolean execute(LintTarget target) {
-        return target.value != null;
+        ArrayList<String> properties = (ArrayList<String>) options.get("properties");
+        int count = 0;
+        for (String property : properties) {
+            if (target.value instanceof Map) {
+                Map<String, Object> map = (Map<String, Object>) target.value;
+                if (map.containsKey(property)) {
+                    count++;
+                }
+            } else {
+                throw new RuntimeException("Xor function can only be used with objects");
+            }
+        }
+
+        return count == 1;
     }
 }

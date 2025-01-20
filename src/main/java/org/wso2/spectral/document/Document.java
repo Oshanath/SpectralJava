@@ -54,6 +54,10 @@ public class Document {
         Load yamlLoader = new Load(settings);
         Object yamlData = yamlLoader.loadFromInputStream(inputStream);
 
+        if (yamlData == null) {
+            return;
+        }
+
         Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
         this.documentString = gson.toJson(yamlData);
 

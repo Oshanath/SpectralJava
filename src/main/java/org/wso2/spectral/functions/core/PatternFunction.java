@@ -21,43 +21,39 @@ import org.wso2.spectral.document.LintTarget;
 import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
-import java.util.List;
 import java.util.Map;
+import java.util.regex.PatternSyntaxException;
 
 /**
- * Length function implementation
+ * Pattern function implementation
  */
-@FunctionName("length")
-public class Length extends LintFunction {
+@FunctionName("pattern")
+public class PatternFunction extends LintFunction {
 
-    public Length(Map<String, Object> options) {
+    public PatternFunction(Map<String, Object> options) {
         super(options);
     }
 
     public boolean execute(LintTarget target) {
-        int length;
+        Object match = options.get("match");
+        Object notMatch = options.get("notMatch");
 
-        if (target.value instanceof String) {
-            length = ((String) target.value).length();
-        } else if (target.value instanceof List) {
-            length = ((List) target.value).size();
-        } else if (target.value instanceof Map) {
-            length = ((Map) target.value).size();
-        } else {
+        if (target.value == null) {
+            return false;
+        }
+        if (!(target.value instanceof String)) {
             return true;
         }
 
-        if (options.containsKey("min") && options.containsKey("max")) {
-            int min = (int) options.get("min");
-            int max = (int) options.get("max");
-            return length >= min && length <= max;
-        } else  if (options.containsKey("min")) {
-            int min = (int) options.get("min");
-            return length >= min;
-        } else if (options.containsKey("max")) {
-            int max = (int) options.get("max");
-            return length <= max;
-        } else {
+        try {
+            if (match != null) {
+                return target.value.toString().matches((String) match);
+            } else if (notMatch != null) {
+                return !target.value.toString().matches((String) notMatch);
+            } else {
+                throw new RuntimeException("Pattern function requires either match or notMatch options");
+            }
+        } catch (PatternSyntaxException e) {
             return false;
         }
     }

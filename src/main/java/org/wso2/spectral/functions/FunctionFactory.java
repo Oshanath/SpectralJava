@@ -1,6 +1,6 @@
 package org.wso2.spectral.functions;
 
-import com.sun.tools.javac.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
 
 import java.lang.reflect.InvocationTargetException;
@@ -27,7 +27,7 @@ public class FunctionFactory {
     }
 
     public static LintFunction getFunction(String functionName, Map<String, Object> functionOptions) {
-        Class<? extends LintFunction> functionClass = functionRegistry.get(StringUtils.toLowerCase(functionName));
+        Class<? extends LintFunction> functionClass = functionRegistry.get(StringUtils.toRootLowerCase(functionName));
         if (functionClass == null) {
             throw new IllegalArgumentException("Unknown shape type: " + functionName);
         }

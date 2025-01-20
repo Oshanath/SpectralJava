@@ -21,19 +21,28 @@ import org.wso2.spectral.document.LintTarget;
 import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
+import java.util.List;
 import java.util.Map;
 
 /**
- * Function to check if a value is undefined
+ * Function to check if a value is truthy
  */
-@FunctionName("undefined")
-public class Undefined extends LintFunction {
+@FunctionName("truthy")
+public class TruthyFunction extends LintFunction {
 
-    public Undefined(Map<String, Object> options) {
+    public TruthyFunction(Map<String, Object> options) {
         super(null);
     }
 
     public boolean execute(LintTarget target) {
-        return target.value == null;
+        if (target.value instanceof String) {
+            return !((String) target.value).isEmpty();
+        } else if (target.value instanceof List) {
+            return !((List) target.value).isEmpty();
+        } else if (target.value instanceof Map) {
+            return !((Map) target.value).isEmpty();
+        } else {
+            return target.value != null;
+        }
     }
 }

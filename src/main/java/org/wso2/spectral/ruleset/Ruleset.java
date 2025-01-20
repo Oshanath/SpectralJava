@@ -17,10 +17,13 @@
  */
 package org.wso2.spectral.ruleset;
 
+import org.wso2.spectral.ruleset.validator.RulesetValidationResult;
+import static org.wso2.spectral.ruleset.RulesetAliasDefinition.resolveAliasGiven;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import static org.wso2.spectral.ruleset.RulesetAliasDefinition.resolveAliasGiven;
 
 /**
  * Ruleset class represents a set of rules that can be applied to a document.
@@ -37,8 +40,11 @@ public class Ruleset {
         this.aliases = new HashMap<>();
         this.hasComplexAliases = false;
 
-        assertValidRuleset(datamap);
-        Map<String, Object> rules = (Map<String, Object>) datamap.get("rules");
+        if (datamap == null) {
+            return;
+        }
+
+        Map<String, Object> ruleMap = (Map<String, Object>) datamap.get("rules");
 
         // Read aliases
         if (datamap.containsKey("aliases")) {
@@ -50,12 +56,11 @@ public class Ruleset {
                     this.hasComplexAliases = true;
                 }
             }
+            resolveAliasesInAliases();
         }
 
-        resolveAliasesInAliases();
-
         // Read rules
-        for (Map.Entry<String, Object> entry : rules.entrySet()) {
+        for (Map.Entry<String, Object> entry : ruleMap.entrySet()) {
             String ruleName = entry.getKey();
             Rule rule = new Rule(ruleName, (Map<String, Object>) entry.getValue(), this.aliases);
             this.rules.put(ruleName, rule);
@@ -100,12 +105,9 @@ public class Ruleset {
         }
     }
 
-    private void assertValidRuleset(Object yamlData) {
+    public List<RulesetValidationResult> validate() {
 
-        // TODO: Validate aliases
-
-        // TODO: Validate by format
-
-        // TODO: Validate function options
+        // TODO: Validate Ruleset
+        return new ArrayList<>();
     }
 }

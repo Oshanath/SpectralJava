@@ -17,7 +17,7 @@
  */
 package org.wso2.spectral.ruleset;
 
-import com.sun.tools.javac.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.wso2.spectral.DiagnosticSeverity;
 import static org.wso2.spectral.ruleset.RulesetAliasDefinition.resolveAliasGiven;
 
@@ -66,7 +66,7 @@ public class Rule {
         }
 
         if (severityObject instanceof String) {
-            this.severity = DiagnosticSeverity.valueOf(StringUtils.toUpperCase((String) severityObject));
+            this.severity = DiagnosticSeverity.valueOf(StringUtils.toRootUpperCase((String) severityObject));
         } else {
             this.severity = DiagnosticSeverity.ERROR;
         }

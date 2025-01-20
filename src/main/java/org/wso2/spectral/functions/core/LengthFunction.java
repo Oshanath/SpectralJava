@@ -25,24 +25,40 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Function to check if a value is truthy
+ * Length function implementation
  */
-@FunctionName("truthy")
-public class Truthy extends LintFunction {
+@FunctionName("length")
+public class LengthFunction extends LintFunction {
 
-    public Truthy(Map<String, Object> options) {
-        super(null);
+    public LengthFunction(Map<String, Object> options) {
+        super(options);
     }
 
     public boolean execute(LintTarget target) {
+        int length;
+
         if (target.value instanceof String) {
-            return !((String) target.value).isEmpty();
+            length = ((String) target.value).length();
         } else if (target.value instanceof List) {
-            return !((List) target.value).isEmpty();
+            length = ((List) target.value).size();
         } else if (target.value instanceof Map) {
-            return !((Map) target.value).isEmpty();
+            length = ((Map) target.value).size();
         } else {
-            return target.value != null;
+            return true;
+        }
+
+        if (options.containsKey("min") && options.containsKey("max")) {
+            int min = (int) options.get("min");
+            int max = (int) options.get("max");
+            return length >= min && length <= max;
+        } else  if (options.containsKey("min")) {
+            int min = (int) options.get("min");
+            return length >= min;
+        } else if (options.containsKey("max")) {
+            int max = (int) options.get("max");
+            return length <= max;
+        } else {
+            return false;
         }
     }
 }

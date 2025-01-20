@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
  * Function to check the casing of a string
  */
 @FunctionName("casing")
-public class Casing extends LintFunction {
+public class CasingFunction extends LintFunction {
 
     private static final String flat = "[a-z][a-z{__DIGITS__}]*";
     private static final String camel = "[a-z][a-z{__DIGITS__}]*(?:[A-Z{__DIGITS__}](?:[a-z{__DIGITS__}]+|$))*";
@@ -40,7 +40,7 @@ public class Casing extends LintFunction {
 
     private static final String digitPattern = "0-9";
 
-    public Casing(Map<String, Object> options) {
+    public CasingFunction(Map<String, Object> options) {
         super(options);
     }
 

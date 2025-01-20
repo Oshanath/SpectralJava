@@ -24,22 +24,16 @@ import org.wso2.spectral.functions.LintFunction;
 import java.util.Map;
 
 /**
- * Enumeration function to check whether a value is contained in a set of values
+ * Function to check if a value is undefined
  */
-@FunctionName("enumeration")
-public class Enumeration extends LintFunction {
+@FunctionName("undefined")
+public class UndefinedFunction extends LintFunction {
 
-    public Enumeration(Map<String, Object> options) {
-        super(options);
+    public UndefinedFunction(Map<String, Object> options) {
+        super(null);
     }
 
     public boolean execute(LintTarget target) {
-        String[] values = (String[]) options.get("values");
-        for (String value : values) {
-            if (target.value.equals(value)) {
-                return true;
-            }
-        }
-        return false;
+        return target.value == null;
     }
 }
