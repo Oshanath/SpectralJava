@@ -15,7 +15,7 @@ public class FunctionFactory {
 
     // Static block to initialize the registry
     static {
-        registerFunctions("org.wso2.spectral.functions.core"); // Replace with your package
+        registerFunctions("org.wso2.rule.validator.functions.core"); // Replace with your package
     }
 
     private static void registerFunctions(String packageName) {
@@ -29,12 +29,12 @@ public class FunctionFactory {
     public static LintFunction getFunction(String functionName, Map<String, Object> functionOptions) {
         Class<? extends LintFunction> functionClass = functionRegistry.get(StringUtils.toRootLowerCase(functionName));
         if (functionClass == null) {
-            throw new IllegalArgumentException("Unknown shape type: " + functionName);
+            throw new IllegalArgumentException("Unknown function: " + functionName);
         }
         try {
             return (LintFunction) functionClass.getDeclaredConstructors()[0].newInstance(functionOptions);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException("Error creating shape instance", e);
+            throw new RuntimeException("Error creating function instance", e);
         }
     }
 
