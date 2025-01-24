@@ -21,14 +21,13 @@ import org.snakeyaml.engine.v2.api.Load;
 import org.snakeyaml.engine.v2.api.LoadSettings;
 import org.wso2.spectral.ruleset.Ruleset;
 
-import java.io.InputStream;
 import java.util.Map;
 
 /**
  * This class is used to load a yaml ruleset file
  */
 public class YamlRuleset extends Ruleset {
-    public YamlRuleset(InputStream rulesetStream) {
-        super((Map<String, Object>) (new Load(LoadSettings.builder().build())).loadFromInputStream(rulesetStream));
+    public YamlRuleset(String rulesetString) {
+        super((Map<String, Object>) (new Load(LoadSettings.builder().build())).loadFromString(rulesetString));
     }
 }

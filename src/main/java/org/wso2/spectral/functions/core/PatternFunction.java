@@ -21,7 +21,10 @@ import org.wso2.spectral.document.LintTarget;
 import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
@@ -32,6 +35,51 @@ public class PatternFunction extends LintFunction {
 
     public PatternFunction(Map<String, Object> options) {
         super(options);
+    }
+
+    @Override
+    public List<String> validateFunctionOptions(Map<String, Object> options) {
+        ArrayList<String> errors = new ArrayList<>();
+
+        if (options == null) {
+            errors.add("Pattern function requires a regex pattern");
+            return errors;
+        }
+
+        if (!options.containsKey("match") && !options.containsKey("notMatch")) {
+            errors.add("Pattern function requires either match or notMatch options");
+        }
+
+        if (options.containsKey("match") && options.containsKey("notMatch")) {
+            errors.add("Pattern function cannot contain both match and notMatch options.");
+        }
+
+        if (options.containsKey("match") && !(options.get("match") instanceof String)) {
+            errors.add("Pattern function match option must be a string.");
+        }
+
+        if (options.containsKey("notMatch") && !(options.get("notMatch") instanceof String)) {
+            errors.add("Pattern function notMatch option must be a string.");
+        }
+
+        if (options.containsKey("match") && !isValidRegex((String) options.get("match"))) {
+            errors.add("Pattern function match option is not a valid regex pattern.");
+        }
+
+        if (options.containsKey("notMatch") && !isValidRegex((String) options.get("notMatch"))) {
+            errors.add("Pattern function notMatch option is not a valid regex pattern.");
+        }
+
+        return errors;
+    }
+
+    private boolean isValidRegex(String regex) {
+        try {
+            Pattern.compile(regex);
+            return true;
+        } catch (PatternSyntaxException e) {
+            return false;
+        }
     }
 
     public boolean execute(LintTarget target) {

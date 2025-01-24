@@ -20,14 +20,11 @@ package org.wso2.spectral.ruleset.file.type;
 import com.jayway.jsonpath.JsonPath;
 import org.wso2.spectral.ruleset.Ruleset;
 
-import java.io.InputStream;
-import java.util.Map;
-
 /**
  * This class is used to parse a JSON ruleset file.
  */
 public class JsonRuleset extends Ruleset {
-    public JsonRuleset(InputStream rulesetStream) {
-        super((Map<String, Object>) JsonPath.parse(rulesetStream).json());
+    public JsonRuleset(String rulesetString) {
+        super(JsonPath.parse(rulesetString).json());
     }
 }

@@ -65,6 +65,8 @@ public class Rule {
             this.message = "";
         }
 
+        // TODO: Implement message placeholder logic
+
         if (severityObject instanceof String) {
             this.severity = DiagnosticSeverity.valueOf(StringUtils.toRootUpperCase((String) severityObject));
         } else {
@@ -76,6 +78,8 @@ public class Rule {
         } else {
             this.resolved = false;
         }
+
+        // TODO: Implement Recommended
 
         this.formats = new ArrayList<>();
         if (formatsObject instanceof List) {

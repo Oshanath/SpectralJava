@@ -21,6 +21,8 @@ import org.wso2.spectral.document.LintTarget;
 import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,6 +33,34 @@ public class AlphabeticalFunction extends LintFunction {
 
     public AlphabeticalFunction(Map<String, Object> options) {
         super(options);
+    }
+
+    @Override
+    public List<String> validateFunctionOptions(Map<String, Object> options) {
+
+        ArrayList<String> errors = new ArrayList<>();
+
+        if (options == null) {
+            return errors;
+        }
+
+        for (Map.Entry<String, Object> entry : options.entrySet()) {
+            if (!entry.getKey().equals("value")) {
+                errors.add("Invalid option '" + entry.getKey() + "' for function 'alphabetical'");
+
+
+                if (entry.getKey().equals("keyedBy")) {
+                    if (!(options.get(entry.getKey()) instanceof String)) {
+                        errors.add("The value of 'keyedBy' should be a string");
+                    }
+                } else {
+                    errors.add("Unknown option '" + entry.getKey() + "' for alphabetical function.");
+                }
+            }
+        }
+
+        return errors;
+
     }
 
     public boolean execute(LintTarget target) {

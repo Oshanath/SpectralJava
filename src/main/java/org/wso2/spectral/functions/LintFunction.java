@@ -19,6 +19,7 @@ package org.wso2.spectral.functions;
 
 import org.wso2.spectral.document.LintTarget;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,4 +35,6 @@ public abstract class LintFunction {
     public LintFunction(Map<String, Object> options) {
         this.options = options;
     }
+
+    public abstract List<String> validateFunctionOptions(Map<String, Object> options);
 }

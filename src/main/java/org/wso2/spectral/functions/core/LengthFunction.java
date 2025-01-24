@@ -21,6 +21,7 @@ import org.wso2.spectral.document.LintTarget;
 import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,31 @@ public class LengthFunction extends LintFunction {
 
     public LengthFunction(Map<String, Object> options) {
         super(options);
+    }
+
+    @Override
+    public List<String> validateFunctionOptions(Map<String, Object> options) {
+        ArrayList<String> errors = new ArrayList<>();
+
+        if (options == null) {
+            errors.add("Length function requires at least a min or a max value.");
+            return errors;
+        }
+
+        if (!options.containsKey("min") && !options.containsKey("max")) {
+            errors.add("Length function requires at least a min or a max value.");
+            return errors;
+        }
+
+        if (options.containsKey("min") && !(options.get("min") instanceof Integer)) {
+            errors.add("Length function min value should be an integer.");
+        }
+
+        if (options.containsKey("max") && !(options.get("max") instanceof Integer)) {
+            errors.add("Length function max value should be an integer.");
+        }
+
+        return errors;
     }
 
     public boolean execute(LintTarget target) {

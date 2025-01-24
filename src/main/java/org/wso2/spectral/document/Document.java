@@ -32,7 +32,6 @@ import org.wso2.spectral.ruleset.Rule;
 import org.wso2.spectral.ruleset.RuleThen;
 import org.wso2.spectral.ruleset.Ruleset;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -49,10 +48,10 @@ public class Document {
     private Object document;
     Format format;
 
-    public Document(InputStream inputStream) {
+    public Document(String documentString) {
         LoadSettings settings = LoadSettings.builder().build();
         Load yamlLoader = new Load(settings);
-        Object yamlData = yamlLoader.loadFromInputStream(inputStream);
+        Object yamlData = yamlLoader.loadFromString(documentString);
 
         if (yamlData == null) {
             return;

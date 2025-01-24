@@ -20,10 +20,14 @@ package org.wso2.spectral.functions.core;
 import com.google.gson.Gson;
 import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.wso2.spectral.document.LintTarget;
 import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,6 +38,56 @@ public class SchemaFunction extends LintFunction {
 
     public SchemaFunction(Map<String, Object> options) {
         super(options);
+    }
+
+    @Override
+    public List<String> validateFunctionOptions(Map<String, Object> options) {
+        ArrayList<String> errors = new ArrayList<>();
+
+        if (options == null) {
+            errors.add("Schema function should at least contain the schema option.");
+            return errors;
+        }
+
+        if (!options.containsKey("schema")) {
+            errors.add("Schema function should contain the schema option.");
+        }
+
+        if (options.containsKey("schema")) {
+            String schema = new Gson().toJson(options.get("schema"));
+            if (!isValidSchema(schema)) {
+                errors.add("Schema function should contain a valid JSON schema.");
+            }
+        }
+
+        if (options.containsKey("dialect")) {
+            if (!(options.get("dialect") instanceof String)) {
+                errors.add("Schema function should contain a string value for the dialect option.");
+            } else {
+                String dialect = (String) options.get("dialect");
+                List<String> dialects = new ArrayList<>(Arrays.asList(
+                        "auto", "draft4", "draft6", "draft7", "draft2019-09", "draft2020-12"));
+                if (!dialects.contains(dialect)) {
+                    errors.add("Schema function should contain a valid JSON schema dialect.");
+                }
+            }
+        }
+
+        if (options.containsKey("allErrors") && !(options.get("allErrors") instanceof Boolean)) {
+            errors.add("Schema function should contain a boolean value for the allErrors option.");
+        }
+
+        return errors;
+    }
+
+    private boolean isValidSchema(String jsonSchemaString) {
+        try {
+            JSONObject rawSchema = new JSONObject(new JSONTokener(jsonSchemaString));
+            SchemaLoader.load(rawSchema);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public boolean execute(LintTarget target) {

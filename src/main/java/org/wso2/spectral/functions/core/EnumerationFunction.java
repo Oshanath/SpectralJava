@@ -21,6 +21,8 @@ import org.wso2.spectral.document.LintTarget;
 import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,6 +33,23 @@ public class EnumerationFunction extends LintFunction {
 
     public EnumerationFunction(Map<String, Object> options) {
         super(options);
+    }
+
+    @Override
+    public List<String> validateFunctionOptions(Map<String, Object> options) {
+        ArrayList<String> errors = new ArrayList<>();
+
+        if (options == null) {
+            errors.add("Enumeration function requires the set of values.");
+            return errors;
+        }
+
+        if (!options.containsKey("values")) {
+            errors.add("Enumeration function requires the set of values.");
+            return errors;
+        }
+
+        return errors;
     }
 
     public boolean execute(LintTarget target) {

@@ -21,6 +21,8 @@ import org.wso2.spectral.document.LintTarget;
 import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -42,6 +44,45 @@ public class CasingFunction extends LintFunction {
 
     public CasingFunction(Map<String, Object> options) {
         super(options);
+    }
+
+    @Override
+    public List<String> validateFunctionOptions(Map<String, Object> options) {
+        ArrayList<String> errors = new ArrayList<>();
+
+        if (options == null) {
+            errors.add("At least the casing type should be specified in functionOptions in the 'casing' function.");
+            return errors;
+        }
+
+        // required options
+        if (!options.containsKey("type")) {
+            errors.add("The 'type' option is required for the 'casing' function.");
+        }
+
+        // optional options
+        for (Map.Entry<String, Object> entry : options.entrySet()) {
+            if (entry.getKey().equals("disallowDigits")) {
+                if (!(options.get(entry.getKey()) instanceof Boolean)) {
+                    errors.add("The 'disallowDigits' option should be a boolean.");
+                }
+            } else if (entry.getKey().equals("separator")) {
+                if (!(options.get(entry.getKey()) instanceof Map)) {
+                    errors.add("The 'separator' option should be a map.");
+                    continue;
+                }
+
+                Map<String, Object> separator = (Map<String, Object>) options.get(entry.getKey());
+                if (separator.containsKey("char") && !(separator.get("char") instanceof String)) {
+                    errors.add("The 'char' key in the 'separator' option should be a string.");
+                }
+                if (separator.containsKey("allowLeading") && !(separator.get("allowLeading") instanceof Boolean)) {
+                    errors.add("The 'allowLeading' key in the 'separator' option should be a boolean.");
+                }
+            }
+        }
+
+        return errors;
     }
 
     public boolean execute(LintTarget target) {

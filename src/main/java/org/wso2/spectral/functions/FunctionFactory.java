@@ -37,4 +37,8 @@ public class FunctionFactory {
             throw new RuntimeException("Error creating shape instance", e);
         }
     }
+
+    public static boolean isFunction(String functionName) {
+        return functionRegistry.containsKey(StringUtils.toRootLowerCase(functionName));
+    }
 }

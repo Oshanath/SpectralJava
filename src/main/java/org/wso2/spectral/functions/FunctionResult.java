@@ -26,17 +26,17 @@ public class FunctionResult {
     public final boolean passed;
     public final String path;
     public final String message;
-    public final Rule rule;
+    public final String ruleName;
 
     public FunctionResult(boolean passed, String path, String message, Rule rule) {
         this.passed = passed;
         this.path = path;
         this.message = message;
-        this.rule = rule;
+        this.ruleName = rule.name;
     }
 
     public String toString() {
-        return "Rule: " + rule.name + " {\n" +
+        return "Rule: " + ruleName + " {\n" +
                 "\tpassed=" + passed +
                 "\n\tpath='" + path + '\'' +
                 "\n\tmessage='" + message + '\'' +

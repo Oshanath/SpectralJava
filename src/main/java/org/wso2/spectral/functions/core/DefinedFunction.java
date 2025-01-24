@@ -21,6 +21,8 @@ import org.wso2.spectral.document.LintTarget;
 import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,6 +33,17 @@ public class DefinedFunction extends LintFunction {
 
     public DefinedFunction(Map<String, Object> options) {
         super(null);
+    }
+
+    @Override
+    public List<String> validateFunctionOptions(Map<String, Object> options) {
+        ArrayList<String> errors = new ArrayList<>();
+
+        if (options != null && !options.isEmpty()) {
+            errors.add("Defined function does not accept any options.");
+        }
+
+        return errors;
     }
 
     public boolean execute(LintTarget target) {

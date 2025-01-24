@@ -17,12 +17,10 @@
  */
 package org.wso2.spectral.ruleset;
 
-import org.wso2.spectral.ruleset.validator.RulesetValidationResult;
 import static org.wso2.spectral.ruleset.RulesetAliasDefinition.resolveAliasGiven;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -103,11 +101,5 @@ public class Ruleset {
                 }
             }
         }
-    }
-
-    public List<RulesetValidationResult> validate() {
-
-        // TODO: Validate Ruleset
-        return new ArrayList<>();
     }
 }

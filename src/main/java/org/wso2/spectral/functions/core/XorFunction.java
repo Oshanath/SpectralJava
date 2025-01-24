@@ -22,6 +22,7 @@ import org.wso2.spectral.functions.FunctionName;
 import org.wso2.spectral.functions.LintFunction;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,6 +33,36 @@ public class XorFunction extends LintFunction {
 
     public XorFunction(Map<String, Object> options) {
         super(options);
+    }
+
+    @Override
+    public List<String> validateFunctionOptions(Map<String, Object> options) {
+        ArrayList<String> errors = new ArrayList<>();
+
+        if (options == null) {
+            errors.add("Xor function requires the list of properties.");
+            return errors;
+        }
+
+        if (!options.containsKey("properties")) {
+            errors.add("Xor function requires the list of properties.");
+            return errors;
+        }
+
+        if (!(options.get("properties") instanceof List)) {
+            errors.add("Xor function requires the list of properties.");
+            return errors;
+        }
+
+        List<Object> properties = (List<Object>) options.get("properties");
+        for (Object property : properties) {
+            if (!(property instanceof String)) {
+                errors.add("Xor function properties requires a list of Strings.");
+                return errors;
+            }
+        }
+
+        return errors;
     }
 
     public boolean execute(LintTarget target) {
