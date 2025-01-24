@@ -21,23 +21,23 @@
     <!-- false-positive. See details at https://github.com/spotbugs/spotbugs/issues/1601 -->
     <!-- TODO: Remove the following after implementing the respective functions. -->
     <Match>
-        <Class name="org.wso2.spectral.document.Document"/>
+        <Class name="org.wso2.rule.validator.document.Document"/>
         <Bug pattern="URF_UNREAD_FIELD"/>
     </Match>
     <Match>
-        <Class name="org.wso2.spectral.ruleset.Rule"/>
+        <Class name="org.wso2.rule.validator.ruleset.Rule"/>
         <Bug pattern="URF_UNREAD_FIELD"/>
     </Match>
     <Match>
-        <Class name="org.wso2.spectral.ruleset.Ruleset"/>
+        <Class name="org.wso2.rule.validator.ruleset.Ruleset"/>
         <Bug pattern="URF_UNREAD_FIELD, UUF_UNUSED_FIELD"/>
     </Match>
     <Match>
-        <Class name="org.wso2.spectral.ruleset.RulesetAliasDefinition"/>
+        <Class name="org.wso2.rule.validator.ruleset.RulesetAliasDefinition"/>
         <Bug pattern="URF_UNREAD_FIELD"/>
     </Match>
     <Match>
-        <Class name="org.wso2.spectral.ruleset.RulesetAliasTarget"/>
+        <Class name="org.wso2.rule.validator.ruleset.RulesetAliasTarget"/>
         <Bug pattern="URF_UNREAD_FIELD"/>
     </Match>
 </FindBugsFilter>
